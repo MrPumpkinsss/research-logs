@@ -1,14 +1,10 @@
-# research-logs
-This repository records my weekly logs
+# **2026/3/19 TODO**
 
 
-## 2026/3/19 TODO
-
-
-### 1. （已解决）通过build from source重新部署虚拟机环境
+## 1. （已解决）通过build from source重新部署虚拟机环境
 原先是基于docker compose部署的一个ray header，两个ray worker的容器，源代码通过配置容器时候的yml文件中的volume传入，不需要build就可以传入一两个修改后的py文件，随着修改的源文件越来越多，这个方法会变得很麻烦。于是通过uv pip install .e重新管理容器。
 
-### 2. （已解决）解决vllm分割不同数量layers到不同container后，vllm V1引擎初始化不稳定问题
+## 2. （已解决）解决vllm分割不同数量layers到不同container后，vllm V1引擎初始化不稳定问题
 部署Qwen3-0.6B有概率报错，启动指令
 ```
 python3 -m vllm.entrypoints.openai.api_server     --model Qwen/Qwen3-0.6B     --pipeline-parallel-size 3     --distributed-executor-backend ray     --max-model-len 1024     --gpu-memory-utilization 0.3
@@ -37,9 +33,15 @@ kv_cache_group_spec.layer_names 里是全局所有层，需要跳过不属于自
 
 vllm官方镜像mistral-common过旧，需要uv pip install --system --upgrade mistral-common
 
-### 3. 测试并理解AMCoEdge
+现在已经能稳定的给不同的容器分配不同的层数了，但是目前只验证了容器是单机单卡的情况
+
+## 3. 测试并理解AMCoEdge
 
 https://github.com/ChangfuXu/AMCoEdge
 
+代码已经能跑通，但是源代码用的是tensorflow 1.4.0非常老。看看能不能把AMCoEdge原理用到vllm的自适应分配上。
 
+# **论文阅读**
 
+Attention Residuals很火
+还在读
