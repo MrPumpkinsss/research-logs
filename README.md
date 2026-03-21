@@ -41,6 +41,16 @@ https://github.com/ChangfuXu/AMCoEdge
 
 代码已经能跑通，但是源代码用的是tensorflow 1.4.0非常老。看看能不能把AMCoEdge原理用到vllm的自适应分配上。
 
+第一阶段：DQN 选 ES 子集。
+第二阶段：CWA算出最优负载比例。
+
+源实现DQN的state
+```
+state_bnt[b][n] = np.hstack([env.arrival_bits[t][b][n], env.proc_queue_len[t]])
+```
+第 1 个元素：arrival_bits[t][b][n] 当前任务n的数据大小（Mbits）
+后面 n_BSs 个元素：proc_queue_len[t] 所有server当前的处理队列workload长度。
+
 # **论文阅读**
 
 Attention Residuals很火
