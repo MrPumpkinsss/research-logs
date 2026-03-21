@@ -2,7 +2,7 @@
 
 
 ## 1. （已解决）通过build from source重新部署虚拟机环境
-原先是基于docker compose部署的一个ray header，两个ray worker的容器，源代码通过配置容器时候的yml文件中的volume传入，不需要build就可以传入一两个修改后的py文件，随着修改的源文件越来越多，这个方法会变得很麻烦。于是通过uv pip install .e重新管理容器。
+原先是基于docker compose部署的一个ray header，两个ray worker的容器实现的模拟器。源代码通过配置容器时候的docker-compose.yml中的volume传入，不需要build就可以传入一两个修改后的py文件，随着修改的源文件越来越多，这个方法会变得很麻烦。于是通过uv pip install .e重新管理容器。
 
 ## 2. （已解决）解决vllm分割不同数量layers到不同container后，vllm V1引擎初始化不稳定问题
 部署Qwen3-0.6B有概率报错，启动指令
