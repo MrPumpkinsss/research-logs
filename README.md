@@ -1,3 +1,11 @@
+# **2026/3/23 TODO**
+## 1. 利用AMCoEdge的部分源代码完成针对大模型自适应分割的实现
+
+## 2. 看infocomm今年接受的大模型分布推理相关的论文，做一个汇总
+有时间也汇总下osdi, nsdi, eurosys, mobisys
+
+## 3. 重新整理AMCoEdge的ppt
+
 # **2026/3/19 TODO**
 
 
@@ -44,7 +52,7 @@ https://github.com/ChangfuXu/AMCoEdge
 第一阶段：DQN 选 ES 子集。
 第二阶段：CWA算出最优负载比例。
 
-源实现DQN的state
+原实现DQN的state
 ```
 state_bnt[b][n] = np.hstack([env.arrival_bits[t][b][n], env.proc_queue_len[t]])
 ```
