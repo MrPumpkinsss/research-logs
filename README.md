@@ -1,18 +1,32 @@
 # **2026/3/23 TODO**
-## 1. 利用AMCoEdge的部分源代码完成针对大模型自适应分割的实现
+## **1. 利用AMCoEdge的部分源代码完成针对大模型自适应分割的实现**
 
-## 2. 看infocomm今年接受的大模型分布推理相关的论文，做一个汇总
+比较相似的三篇：
+### Adaptive Layer Splitting for Wireless LLM Inference in Edge Computing: A Model-Based Reinforcement Learning Approach
+通过PPO决定LLM在UE与边缘节点间的层拆分点，在无线信道波动下平衡推理性能（PPL）与UE计算负载，并引入奖励代理模型加速训练。
+State Space是Noise Intensity，Nakagami-m fading shape（描述无线信号衰落严重程度），Split Point (p)
+reward是模型效果（PPL）+ 手机计算代价的加权
+这论文关注于网络方面的实验多一些，而不是推理延迟。有个MLP来通过state space的这三个东西算出来PPL，这样不用在实机上跑。
+
+![](images/2026-03-28-00-18-53.png)
+高丢包 / 动态场景下ppo表现最好
+### Splitwise: Collaborative Edge–Cloud Inference for LLMs via Lyapunov-Assisted DRL
+把Transformer层细粒度拆分为attention heads and feed-forward，用RL实现动态自适应分区，也是PPO实现的。对比了Edgeshard，说是减少了41%能耗，速度也有提升。
+
+读完发现PPO比AMcoedge的DQN要好，DQN的action space在设备多的情况下维度太大。目前决定用PPO实现自适应分割
+
+## **2. 看infocomm今年接受的大模型分布推理相关的论文，做一个汇总**
 有时间也汇总下osdi, nsdi, eurosys, mobisys
 
-## 3. 重新整理AMCoEdge的ppt
+## **3. 重新整理AMCoEdge的ppt**
 
 # **2026/3/19 TODO**
 
 
-## 1. （已解决）通过build from source重新部署虚拟机环境
+## **1. （已解决）通过build from source重新部署虚拟机环境**
 原先是基于docker compose部署的一个ray header，两个ray worker的容器实现的模拟器。源代码通过配置容器时候的docker-compose.yml中的volume传入，不需要build就可以传入一两个修改后的py文件，随着修改的源文件越来越多，这个方法会变得很麻烦。于是通过uv pip install .e重新管理容器。
 
-## 2. （已解决）解决vllm分割不同数量layers到不同container后，vllm V1引擎初始化不稳定问题
+## **2. （已解决）解决vllm分割不同数量layers到不同container后，vllm V1引擎初始化不稳定问题**
 部署Qwen3-0.6B有概率报错，启动指令
 ```
 python3 -m vllm.entrypoints.openai.api_server     --model Qwen/Qwen3-0.6B     --pipeline-parallel-size 3     --distributed-executor-backend ray     --max-model-len 1024     --gpu-memory-utilization 0.3
@@ -43,7 +57,7 @@ vllm官方镜像mistral-common过旧，需要uv pip install --system --upgrade m
 
 现在已经能稳定的给不同的容器分配不同的层数了，但是目前只验证了容器是单机单卡的情况
 
-## 3. 测试并理解AMCoEdge
+## **3. 测试并理解AMCoEdge**
 
 https://github.com/ChangfuXu/AMCoEdge
 
