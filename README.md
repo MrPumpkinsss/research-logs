@@ -15,6 +15,12 @@ reward是模型效果（PPL）+ 手机计算代价的加权
 
 读完发现PPO比AMcoedge的DQN要好，DQN的action space在设备多的情况下维度太大。目前决定用PPO实现自适应分割
 
+**MDP形式化：**
+State：计算能力，通信能力...
+Action：High-level（RL）策略负责“宏观决策”（选哪些设备、layer分配比例....），Low-level 求解器精确切分layer。
+Reward：推理速度+队列长度+...
+Transition：设备加入或离开
+
 ## **2. 看infocomm今年接受的大模型分布推理相关的论文，做一个汇总**
 有时间也汇总下osdi, nsdi, eurosys, mobisys
 
