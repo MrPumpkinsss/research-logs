@@ -4,36 +4,36 @@
 ## **1. （未解决）利用AMCoEdge的部分源代码完成针对大模型自适应分割的实现**
 
 比较相似的三篇：
-### Adaptive Layer Splitting for Wireless LLM Inference in Edge Computing: A Model-Based Reinforcement Learning Approach
-通过PPO决定LLM在UE与边缘节点间的层拆分点，在无线信道波动下平衡推理性能（PPL）与UE计算负载，并引入奖励代理模型加速训练。
-State Space是Noise Intensity，Nakagami-m fading shape（描述无线信号衰落严重程度），Split Point (p)
-reward是模型效果（PPL）+ 手机计算代价的加权
+### Adaptive Layer Splitting for Wireless LLM Inference in Edge Computing: A Model-Based Reinforcement Learning Approach  
+通过PPO决定LLM在UE与边缘节点间的层拆分点，在无线信道波动下平衡推理性能（PPL）与UE计算负载，并引入奖励代理模型加速训练。  
+State Space是Noise Intensity，Nakagami-m fading shape（描述无线信号衰落严重程度），Split Point (p)  
+reward是模型效果（PPL）+ 手机计算代价的加权  
 这论文关注于网络方面的实验多一些，而不是推理延迟。有个MLP来通过state space的这三个东西算出来PPL，这样不用在实机上跑。
 
-![](images/2026-03-28-00-18-53.png)
+![](images/2026-03-28-00-18-53.png)  
 高丢包 / 动态场景下ppo表现最好
-### Splitwise: Collaborative Edge–Cloud Inference for LLMs via Lyapunov-Assisted DRL
+### Splitwise: Collaborative Edge–Cloud Inference for LLMs via Lyapunov-Assisted DRL  
 把Transformer层细粒度拆分为attention heads and feed-forward，用RL实现动态自适应分区，也是PPO实现的。对比了Edgeshard，说是减少了41%能耗，速度也有提升。
 
 读完发现PPO比AMcoedge的DQN要好，DQN的action space在设备多的情况下维度太大。目前决定用PPO实现自适应分割
 
-**MDP形式化：**
+**MDP形式化：**  
 State：计算能力，通信能力...
-Action：High-level（RL）策略负责“宏观决策”（选哪些设备、layer分配比例....），Low-level 求解器精确切分layer。
-Reward：推理速度+队列长度+...
-Transition：设备加入或离开
+Action：High-level（RL）策略负责“宏观决策”（选哪些设备、layer分配比例....），Low-level 求解器精确切分layer。  
+Reward：推理速度+队列长度+...  
+Transition：设备加入或离开  
 
-为了实现简单现在简单设定目标是最小化TPOT（Time Per Output Token）
+为了实现简单现在简单设定目标是最小化TPOT（Time Per Output Token）  
 
-状态（Observation）：一次性给出所有设备的算力、显存、排名、参数量、Activation Size、设备间带宽、全局信息（设备数、总参数量、总计算量）
-动作（Action）：MultiDiscrete([max_devices]*28)
-一次输出28个整数（每个层分配到哪个设备）。
+状态（Observation）：一次性给出所有设备的算力、显存、排名、参数量、Activation Size、设备间带宽、全局信息（设备数、总参数量、总计算量）  
+动作（Action）：MultiDiscrete([max_devices]*28)  
+一次输出28个整数（每个层分配到哪个设备）。  
 
-奖励（Reward）：
-如果显存超限 -200（重罚）
-否则 -TPOT / 5.0（越快奖励越高）
-训练100000time steps之后效果不理想，样本空间太大了
-![](images/2026-03-30-05-34-33.png)
+奖励（Reward）：  
+如果显存超限 -200（重罚）  
+否则 -TPOT / 5.0（越快奖励越高）  
+训练100000time steps之后效果不理想，样本空间太大了  
+![](images/2026-03-30-05-34-33.png)  
 
 ## **2. （未解决）看infocomm今年接受的大模型分布推理相关的论文，做一个汇总**
 有时间也汇总下osdi, nsdi, eurosys, mobisys
