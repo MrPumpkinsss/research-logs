@@ -1,5 +1,7 @@
+# **2026/3/30 TODO**
+
 # **2026/3/23 TODO**
-## **1. 利用AMCoEdge的部分源代码完成针对大模型自适应分割的实现**
+## **1. （未解决）利用AMCoEdge的部分源代码完成针对大模型自适应分割的实现**
 
 比较相似的三篇：
 ### Adaptive Layer Splitting for Wireless LLM Inference in Edge Computing: A Model-Based Reinforcement Learning Approach
@@ -21,10 +23,22 @@ Action：High-level（RL）策略负责“宏观决策”（选哪些设备、la
 Reward：推理速度+队列长度+...
 Transition：设备加入或离开
 
-## **2. 看infocomm今年接受的大模型分布推理相关的论文，做一个汇总**
+为了实现简单现在简单设定目标是最小化TPOT（Time Per Output Token）
+
+状态（Observation）：一次性给出所有设备的算力、显存、排名、参数量、Activation Size、设备间带宽、全局信息（设备数、总参数量、总计算量）
+动作（Action）：MultiDiscrete([max_devices]*28)
+一次输出28个整数（每个层分配到哪个设备）。
+
+奖励（Reward）：
+如果显存超限 -200（重罚）
+否则 -TPOT / 5.0（越快奖励越高）
+训练100000time steps之后效果不理想，样本空间太大了
+![](images/2026-03-30-05-34-33.png)
+
+## **2. （未解决）看infocomm今年接受的大模型分布推理相关的论文，做一个汇总**
 有时间也汇总下osdi, nsdi, eurosys, mobisys
 
-## **3. 重新整理AMCoEdge的ppt**
+## **3. （已解决）重新整理AMCoEdge的ppt**
 
 # **2026/3/19 TODO**
 
